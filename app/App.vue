@@ -13,16 +13,19 @@ export default {
     return {
       testModules: {
         't1': {
+          packageName: 'test',
           constructor: function() {
            this.showName = 'test1'
           },
         },
         't2': {
+          packageName: 'test',
           constructor: function() {
            this.showName = 'test2'
           },
         },
         't3': {
+          packageName: 'test',
           constructor: function() {
            this.showName = 'test3'
           },

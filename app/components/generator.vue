@@ -11,18 +11,37 @@
           v-for="(name, i) in Object.keys(modules)"
           :key="`${name}-${i}`"
           :options="modules[name].constructor"
-        >
-        </picker>
+        ></picker>
       </draggable>
     </section>
     <section class="center">
       <a-divider>可视区</a-divider>
       <div class="tools-bar">
         <a-select :value='activeLayer' style="width: 120px" size="small">
-          <a-select-option :value='0'>
-            主图层
-          </a-select-option>
+          <a-select-option :value='0'>主图层</a-select-option>
         </a-select>
+      </div>
+      <div class="phone-wrapper">
+      <draggable
+        v-show="activeLayer === 0"
+        class="drag-area"
+        :list="list"
+        group="components"
+      >
+       <div 
+        v-for="(item, index) in list"
+        :key="item + index"
+       >
+        <module
+          ref="module"
+          :index='index'
+          :selected="index===activeIndex"
+          :config="item"
+          @active="handleModuleActive"
+          @delete="handleModuleDelete"
+        />
+       </div>
+      </draggable>
       </div>
     </section>
     <section class="right">
@@ -33,10 +52,12 @@
 
 <script>
 import picker from './picker.vue';
+import module from './module.vue';
 import draggable from 'vuedraggable';
 export default {
   components: {
     picker,
+    module,
     draggable
   },
   props: {
@@ -54,12 +75,25 @@ export default {
       list: [],
       target: null,
       layers: [],
+      activeLater: 0,
       activeLayer: 0,
+      activeModuleIndex: 0,
     }
   },
   methods: {
-    handleDraggableClone(origin) {
-      console.log(origin);
+    handleModuleActive(index) {
+      this.activeModuleIndex = index;
+    },
+    handleModuleDelete(index) {
+      this.list.splice(index, 1);
+    },
+    handleDraggableClone(origin, index) {
+      console.log(origin, index);
+      // const { constructor, packageName } = this.modules[origin];
+      // const component = new constructor();
+      // component.setPackageName(packageName);
+      // const { name } = component;
+      return origin;
     }
   }
 }
@@ -73,13 +107,14 @@ export default {
   display: flex;
   flex-direction: row;
   section {
-    padding: 10px 20px;
+    padding: 5px 10px;
     margin: 10px;
     background: #ffffff;
     border-radius: 5px;
     .tools-bar {
       padding: 5px 15px;
       border-radius: 5px;
+      margin-top: -15px;
       .ant-select {
         .ant-select-selection {
           border: 0;
@@ -94,10 +129,33 @@ export default {
     width: 256px;
   }
   .center {
+    position: relative;
     width: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    .phone-wrapper {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      border-radius: 5px;
+      .drag-area {
+        width: 750px;
+        height: 1334px;
+        border-radius: 5px;
+        overflow-y: scroll;
+        background-color: #efefef;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%) scale(.5);
+        z-index: 2;
+      }
+    }
   }
   .right {
     flex: 1;
   }
+ 
 }
 </style>
