@@ -64,6 +64,7 @@ import module from './module.vue';
 import editor from './editor.vue';
 import toolBarLayout from './toolBarLayout.vue';
 import draggable from 'vuedraggable';
+import api from '../../utils/api';
 export default {
   components: {
     picker,
@@ -90,8 +91,17 @@ export default {
     console.log(this.modules);
   },
   methods: {
-    handleBuildClick() {
+    async handleBuildClick() {
       console.log(this.list);
+      try {
+        const params = {
+          modules: this.list
+        };
+        const res = await api.post('http://127.0.0.1:7001/page', params);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     },
     handleModuleActive(index) {
       this.activeModuleIndex = index;
