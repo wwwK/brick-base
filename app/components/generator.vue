@@ -10,8 +10,8 @@
       >
         <picker
           v-for="(m, i) in modules"
-          :key="`${m.name}-${i}`"
-          :name="m.name"
+          :key="`${m}-${i}`"
+          :module="m"
         ></picker>
       </draggable>
     </section>
@@ -86,9 +86,12 @@ export default {
       activeModuleIndex: -1,
     }
   },
-  mounted() {},
+  mounted() {
+    console.log(this.modules);
+  },
   methods: {
     handleBuildClick() {
+      this.list[1].state.text = 1;
       console.log(this.list);
     },
     handleModuleActive(index) {
@@ -104,7 +107,7 @@ export default {
       }
     },
     handleDraggableClone(origin) {
-      return origin;
+      return new origin();
     },
     handleDraggablePickerEnd(e) {
       const { newIndex } = e;

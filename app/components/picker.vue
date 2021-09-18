@@ -2,17 +2,17 @@
 export default {
   name: 'picker',
   props: {
-    name: {
-      type: String,
-      default: 'defaultName'
+    module: {
+      type: Function,
+      default: () => {}
     }
   },
   render(h) {
-    const { name } = this;
+    const { module } = this;
     return (
       <div class="picker">
         <a-button type='primary' block>
-          { name }
+          { new module().name }
         </a-button>
       </div>
     );
