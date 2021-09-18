@@ -6,6 +6,7 @@
         :list="Object.keys(modules)"
         :group="{ name: 'components', pull: 'clone', put: false }"
         :clone="handleDraggableClone"
+        @end="handleDraggablePickerEnd"
       >
         <picker
           v-for="(name, i) in Object.keys(modules)"
@@ -22,26 +23,27 @@
         </a-select>
       </div>
       <div class="phone-wrapper">
-      <draggable
-        v-show="activeLayer === 0"
-        class="drag-area"
-        :list="list"
-        group="components"
-      >
-       <div 
-        v-for="(item, index) in list"
-        :key="item + index"
-       >
-        <module
-          ref="module"
-          :index='index'
-          :selected="index===activeIndex"
-          :config="item"
-          @active="handleModuleActive"
-          @delete="handleModuleDelete"
-        />
-       </div>
-      </draggable>
+        <draggable
+          v-show="activeLayer === 0"
+          class="drag-area"
+          :list="list"
+          group="components"
+          @end="handleDraggableModuleEnd"
+        >
+          <div 
+            v-for="(item, index) in list"
+            :key="item + index"
+          >
+            <module
+              ref="module"
+              :index='index'
+              :selected="index===activeModuleIndex"
+              :config="item"
+              @active="handleModuleActive"
+              @delete="handleModuleDelete"
+            />
+          </div>
+        </draggable>
       </div>
     </section>
     <section class="right">
@@ -87,13 +89,21 @@ export default {
     handleModuleDelete(index) {
       this.list.splice(index, 1);
     },
-    handleDraggableClone(origin, index) {
-      console.log(origin, index);
+    handleDraggableClone(origin) {
+      console.log(origin);
       // const { constructor, packageName } = this.modules[origin];
       // const component = new constructor();
       // component.setPackageName(packageName);
       // const { name } = component;
       return origin;
+    },
+    handleDraggablePickerEnd(e) {
+      const { newIndex } = e;
+      this.activeModuleIndex = newIndex;
+    },
+    handleDraggableModuleEnd(e) {
+      const { newIndex, oldIndex } = e;
+      if(newIndex === oldIndex) return;
     }
   }
 }
@@ -143,13 +153,13 @@ export default {
         width: 750px;
         height: 1334px;
         border-radius: 5px;
-        overflow-y: scroll;
+        overflow-y: overlay;
+        overflow-x: hidden;
         background-color: #efefef;
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%,-50%) scale(.5);
-        z-index: 2;
       }
     }
   }

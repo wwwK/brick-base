@@ -17,6 +17,12 @@ export default {
       default: false
     }
   },
+  watch: {
+    selected(nVal) {
+      console.log(nVal);
+      this.$forceUpdate();
+    }
+  },
   data() {
     return {}
   },
@@ -50,7 +56,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .module {
   position: relative;
   width: 750px;
@@ -64,5 +70,8 @@ export default {
     z-index: 9999;
     cursor: pointer;
   }
+}
+.selected {
+  border: 1px dashed #f5222d;
 }
 </style>
