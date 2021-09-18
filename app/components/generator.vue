@@ -91,7 +91,6 @@ export default {
   },
   methods: {
     handleBuildClick() {
-      this.list[1].state.text = 1;
       console.log(this.list);
     },
     handleModuleActive(index) {

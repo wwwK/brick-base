@@ -7,7 +7,7 @@ export default {
   name: 'w-text',
   props: {
     text: {
-      type: String,
+      type: [String, Number],
       default: ''
     }
   },
