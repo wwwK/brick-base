@@ -5,32 +5,14 @@
 </template>
 <script>
 import generator from './components/generator.vue';
+import testModules from './demo';
 export default {
   components: {
     generator
   },
   data() {
     return {
-      testModules: {
-        't1': {
-          packageName: 'test',
-          constructor: function() {
-           this.showName = 'test1'
-          },
-        },
-        't2': {
-          packageName: 'test',
-          constructor: function() {
-           this.showName = 'test2'
-          },
-        },
-        't3': {
-          packageName: 'test',
-          constructor: function() {
-           this.showName = 'test3'
-          },
-        },
-      }
+      testModules,
     }
   }
 }

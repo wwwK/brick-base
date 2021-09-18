@@ -3,25 +3,26 @@
     <section class="left">
       <a-divider>组件库</a-divider>
       <draggable
-        :list="Object.keys(modules)"
+        :list="modules"
         :group="{ name: 'components', pull: 'clone', put: false }"
         :clone="handleDraggableClone"
         @end="handleDraggablePickerEnd"
       >
         <picker
-          v-for="(name, i) in Object.keys(modules)"
-          :key="`${name}-${i}`"
-          :options="modules[name].constructor"
+          v-for="(m, i) in modules"
+          :key="`${m.name}-${i}`"
+          :name="m.name"
         ></picker>
       </draggable>
     </section>
     <section class="center">
       <a-divider>可视区</a-divider>
-      <div class="tools-bar">
+      <tool-bar-layout>
         <a-select :value='activeLayer' style="width: 120px" size="small">
           <a-select-option :value='0'>主图层</a-select-option>
         </a-select>
-      </div>
+        <a-button size='small' type="primary" @click="handleBuildClick">build</a-button>
+      </tool-bar-layout>
       <div class="phone-wrapper">
         <draggable
           v-show="activeLayer === 0"
@@ -38,7 +39,8 @@
               ref="module"
               :index='index'
               :selected="index===activeModuleIndex"
-              :config="item"
+              :component="item.ui"
+              :componentProps="item.state"
               @active="handleModuleActive"
               @delete="handleModuleDelete"
             />
@@ -48,6 +50,10 @@
     </section>
     <section class="right">
       <a-divider>编辑区</a-divider>
+      <editor 
+        v-if="list[activeModuleIndex]"
+        :editor="list[activeModuleIndex].editor">
+      </editor>
     </section>
   </div>
 </template>
@@ -55,46 +61,49 @@
 <script>
 import picker from './picker.vue';
 import module from './module.vue';
+import editor from './editor.vue';
+import toolBarLayout from './toolBarLayout.vue';
 import draggable from 'vuedraggable';
 export default {
   components: {
     picker,
     module,
+    editor,
+    toolBarLayout,
     draggable
   },
   props: {
-    conf: {
-      type: Object,
-      default: () => null,
-    },
     modules: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
       list: [],
-      target: null,
       layers: [],
-      activeLater: 0,
       activeLayer: 0,
-      activeModuleIndex: 0,
+      activeModuleIndex: -1,
     }
   },
+  mounted() {},
   methods: {
+    handleBuildClick() {
+      console.log(this.list);
+    },
     handleModuleActive(index) {
       this.activeModuleIndex = index;
     },
     handleModuleDelete(index) {
       this.list.splice(index, 1);
+      const { activeModuleIndex } = this;
+      if(activeModuleIndex === index) {
+        this.activeModuleIndex = 0;
+      } else if(index < activeModuleIndex) {
+        this.activeModuleIndex -= 1;
+      }
     },
     handleDraggableClone(origin) {
-      console.log(origin);
-      // const { constructor, packageName } = this.modules[origin];
-      // const component = new constructor();
-      // component.setPackageName(packageName);
-      // const { name } = component;
       return origin;
     },
     handleDraggablePickerEnd(e) {
@@ -104,6 +113,14 @@ export default {
     handleDraggableModuleEnd(e) {
       const { newIndex, oldIndex } = e;
       if(newIndex === oldIndex) return;
+      const { activeModuleIndex } = this;
+      if(activeModuleIndex === oldIndex) {
+        this.activeModuleIndex = newIndex;
+      } else if(oldIndex < activeModuleIndex && newIndex >= activeModuleIndex) {
+        this.activeModuleIndex -= 1;
+      } else if(oldIndex > activeModuleIndex && newIndex <= activeModuleIndex) {
+        this.activeModuleIndex += 1;
+      }
     }
   }
 }
@@ -121,25 +138,15 @@ export default {
     margin: 10px;
     background: #ffffff;
     border-radius: 5px;
-    .tools-bar {
-      padding: 5px 15px;
-      border-radius: 5px;
-      margin-top: -15px;
-      .ant-select {
-        .ant-select-selection {
-          border: 0;
-          background: #eff3f5;
-        }
-      }
-      background: rgba(23, 81, 153, 0.72);
-      box-shadow: 1px 1px 2px rgb(0 0 0 / 20%);
-    }
+  
   }
   .left {
+    min-width: 256px;
     width: 256px;
   }
   .center {
     position: relative;
+    min-width: 500px;
     width: 500px;
     display: flex;
     flex-direction: column;
@@ -165,6 +172,7 @@ export default {
   }
   .right {
     flex: 1;
+    overflow: hidden;
   }
  
 }

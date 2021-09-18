@@ -1,22 +1,21 @@
-<template>
-  <div class="picker">
-    <a-button type='primary' block>
-      {{ new options().showName }}
-    </a-button>
-  </div>
-</template>
-
 <script>
 export default {
   name: 'picker',
   props: {
-    options: {
-      type: Function,
-      default: () => {}
+    name: {
+      type: String,
+      default: 'defaultName'
     }
   },
-  mounted() {
-    console.log(new this.options());
+  render(h) {
+    const { name } = this;
+    return (
+      <div class="picker">
+        <a-button type='primary' block>
+          { name }
+        </a-button>
+      </div>
+    );
   }
 }
 </script>

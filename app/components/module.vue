@@ -2,7 +2,13 @@
 export default {
   name: 'module',
   props: {
-    config: {
+    component: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    componentProps: {
       type: Object,
       default() {
         return {}
@@ -17,28 +23,17 @@ export default {
       default: false
     }
   },
-  watch: {
-    selected(nVal) {
-      console.log(nVal);
-      this.$forceUpdate();
-    }
-  },
-  data() {
-    return {}
-  },
   methods: {
     handleModuleClick() {
-      console.log('handleModuleClick');
       this.$emit('active', this.index);
     },
-    handleCloseClick() {
+    handleCloseClick(e) {
+      e.stopPropagation();
       this.$emit('delete', this.index);
     }
   },
   render(h) {
-    console.log(this.selected);
-    const { component } = this.config;
-    const props = {};
+    const { component, componentProps } = this;
     const className = {
       module: true,
       selected: this.selected
@@ -48,7 +43,7 @@ export default {
         class={className}
         onClick={this.handleModuleClick}
       >
-        { component ? h(component, { props }) : 1111 }
+        { h(component, { props: componentProps }) }
         <span class="close" onClick={this.handleCloseClick}> x </span>
       </div>
     );
@@ -64,6 +59,8 @@ export default {
   .close {
     width: 30px;
     height: 30px;
+    font-size: 24px;
+    color: #f5222d;
     position: absolute;
     top: 0;
     right: 0;
@@ -72,6 +69,6 @@ export default {
   }
 }
 .selected {
-  border: 1px dashed #f5222d;
+  border: 2px dashed #f5222d;
 }
 </style>
