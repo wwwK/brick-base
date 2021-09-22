@@ -116,7 +116,11 @@ export default {
       }
     },
     handleDraggableClone(origin) {
-      return new origin();
+      const { ui } = origin;
+      return {
+        ui,
+        ...new origin()
+      };
     },
     handleDraggablePickerEnd(e) {
       const { newIndex } = e;

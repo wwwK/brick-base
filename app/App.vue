@@ -1,18 +1,18 @@
 <template>
   <div class="root">
-    <generator :modules="testModules"/>
+    <generator :modules="modules"/>
   </div>
 </template>
 <script>
 import generator from './components/generator.vue';
-import testModules from './demo';
+import modules from '../src/modules';
 export default {
   components: {
     generator
   },
   data() {
     return {
-      testModules,
+      modules,
     }
   }
 }

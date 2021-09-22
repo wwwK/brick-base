@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import App from './App.vue';
-import './styles/index.less';
+import '../styles/index.less';
 import eventManage from '../event';
 
 Vue.config.productionTip = false;

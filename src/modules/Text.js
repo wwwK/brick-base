@@ -1,8 +1,8 @@
-import Text from './text.vue';
+import { text } from '../components';
 
 class TextModule {
-  name = '文字';
-  ui = Text;
+  static ui = text;
+  static name = '文字';
   state = {
     text: '中午吃点啥？'
   };

@@ -12,7 +12,7 @@ export default {
     return (
       <div class="picker">
         <a-button type='primary' block>
-          { new module().name }
+          { module.name }
         </a-button>
       </div>
     );
