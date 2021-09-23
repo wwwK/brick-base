@@ -172,6 +172,7 @@ export default {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background-color: #eff3f5;
     .phone-wrapper {
       position: relative;
       flex: 1;
@@ -183,7 +184,7 @@ export default {
         border-radius: 5px;
         overflow-y: overlay;
         overflow-x: hidden;
-        background-color: #efefef;
+        background-color: #fff;
         position: absolute;
         left: 50%;
         top: 50%;
