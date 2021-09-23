@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development vue-cli-service serve",
-    "preview":  "NODE_ENV=preview vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "NODE_ENV=production vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

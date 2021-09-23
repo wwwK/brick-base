@@ -5,13 +5,13 @@ import eventManage from '../event';
 import modules from './modules';
 import mock from './mock';
 
-const getComponentsByName = name => modules.find(module => module.ui.name === name).ui;
+const getComponentByName = name => modules.find(module => module.ui.name === name).ui;
 
 const render = (h) => {
   return(
     <div>
       {
-        mock.map(d => h(getComponentsByName(d.componentName), { props: { ...d.componentProps } }))
+        mock.map(d => h(getComponentByName(d.componentName), { props: { ...d.componentProps } }))
       }
     </div>
   );

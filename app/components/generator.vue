@@ -92,10 +92,15 @@ export default {
   },
   methods: {
     async handleBuildClick() {
-      console.log(this.list);
       try {
+        const modules = this.list.map(module => {
+          return {
+            componentName: module.ui.name,
+            componentProps: module.state
+          }
+        })
         const params = {
-          modules: this.list
+          modules,
         };
         const res = await api.post('http://127.0.0.1:7001/page', params);
         console.log(res);
