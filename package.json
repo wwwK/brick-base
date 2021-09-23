@@ -1,9 +1,10 @@
 {
   "name": "brick-base",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "dev": "NODE_ENV=development vue-cli-service serve",
+    "preview":  "NODE_ENV=preview vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -21,9 +22,10 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-template-compiler": "^2.6.11",
     "less": "^4.1.1",
-    "less-loader": "^5.0.0"
+    "less-loader": "^5.0.0",
+    "postcss-px-to-viewport": "^1.1.1",
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,

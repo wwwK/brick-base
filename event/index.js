@@ -15,11 +15,11 @@ const eventManage = {
     waittingQueue.forEach(fn => fn.call(null));
     waittingQueue.length = 0;
   },
-  on(event, cb = () => {}) {
+  sub(event, cb = () => {}) {
     if(!cache[event]) cache[event] = [];
     cache[event].push(cb);
   },
-  emit(event, payload) {
+  pub(event, payload) {
     if(waitting) {
       const wrapperOnEmit = () => eventManage.emit(event, payload);
       waittingQueue.push(wrapperOnEmit);
