@@ -18,15 +18,18 @@
     <section class="center">
       <a-divider>可视区</a-divider>
       <tool-bar-layout>
-        <a-select :value='activeLayer' style="width: 120px" size="small">
-          <a-select-option :value='0'>主图层</a-select-option>
+        <a-select v-model="activeLayer" style="width: 120px" size="small" @change="handleLayerSelectedChange">
+          <a-select-option 
+            v-for="(item, index) in layers"
+            :key="item.value + index"
+            :value="item.value" >{{ item.name }}
+          </a-select-option>
         </a-select>
         <a-button size='small' type="primary" @click="handleBuildClick">build</a-button>
       </tool-bar-layout>
       <div class="phone-wrapper">
         <draggable
-          v-show="activeLayer === 0"
-          class="drag-area"
+          class="drag-area app-root"
           :list="list"
           group="components"
           @end="handleDraggableModuleEnd"
@@ -35,15 +38,29 @@
             v-for="(item, index) in list"
             :key="item + index"
           >
-            <module
-              ref="module"
-              :index='index'
-              :selected="index===activeModuleIndex"
-              :component="item.ui"
-              :componentProps="item.state"
-              @active="handleModuleActive"
-              @delete="handleModuleDelete"
-            />
+            <template v-if="!activeLayer">
+              <module
+                ref="module"
+                v-show="!item.layer"
+                :index='index'
+                :selected="index===activeModuleIndex"
+                :component="item.ui"
+                :componentProps="item.state"
+                @active="handleModuleActive"
+                @delete="handleModuleDelete"
+              />
+            </template>
+            <layer v-else-if="item.key === activeLayer">
+              <module
+                ref="module"
+                :index='index'
+                :selected="index===activeModuleIndex"
+                :component="item.ui"
+                :componentProps="item.state"
+                @active="handleModuleActive"
+                @delete="handleModuleDelete"
+              />
+            </layer>
           </div>
         </draggable>
       </div>
@@ -63,6 +80,8 @@ import picker from './picker.vue';
 import module from './module.vue';
 import editor from './editor.vue';
 import toolBarLayout from './toolBarLayout.vue';
+import layer from './layer.vue';
+
 import draggable from 'vuedraggable';
 import api from '../../utils/api';
 export default {
@@ -71,6 +90,7 @@ export default {
     module,
     editor,
     toolBarLayout,
+    layer,
     draggable
   },
   props: {
@@ -82,7 +102,10 @@ export default {
   data() {
     return {
       list: [],
-      layers: [],
+      layers: [{
+        name: '图层0',
+        value: 0,
+      }],
       activeLayer: 0,
       activeModuleIndex: -1,
     }
@@ -91,6 +114,11 @@ export default {
     console.log(this.modules);
   },
   methods: {
+    handleLayerSelectedChange(value) {
+      console.log(value);
+      // todo 这地方还得改一下
+      this.activeModuleIndex = 0;
+    },
     async handleBuildClick() {
       try {
         const modules = this.list.map(module => {
@@ -121,11 +149,25 @@ export default {
       }
     },
     handleDraggableClone(origin) {
-      const { ui } = origin;
-      return {
+      const { ui, layer, name } = origin;
+      const key = +new Date();
+      const target = {
+        key: +new Date(),
         ui,
+        name,
+        layer,
         ...new origin()
       };
+      if(layer) {
+        this.layers.push({
+          name: `图层${this.layers.length}`,
+          value: key
+        });
+        this.activeLayer = key;
+      } else {
+        this.activeLayer = 0;
+      }
+      return target;
     },
     handleDraggablePickerEnd(e) {
       const { newIndex } = e;
@@ -159,7 +201,6 @@ export default {
     margin: 10px;
     background: #ffffff;
     border-radius: 5px;
-  
   }
   .left {
     min-width: 256px;

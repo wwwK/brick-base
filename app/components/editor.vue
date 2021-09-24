@@ -19,21 +19,27 @@ export default {
     }
   },
   render(h) {
-    return this.editor.map(item => {
-      const { title, render } = item;
-      return (
-        <div>
-          <a-card hoverable bordered={false}>
-            <a-divider orientation="left">
-              <span style="font-size: 16px; color: #777">{ title }</span>
-            </a-divider>
-            <div key={this.key}>
-              { render(h) }
-            </div>
-          </a-card>
-        </div>
-      )
-    });
+    return (
+      <div>
+        {
+          this.editor.map(item => {
+            const { title, render } = item;
+            return (
+              <div>
+                <a-card hoverable bordered={false}>
+                  <a-divider orientation="left">
+                    <span style="font-size: 16px; color: #777">{ title }</span>
+                  </a-divider>
+                  <div key={this.key}>
+                    { render(h) }
+                  </div>
+                </a-card>
+              </div>
+            )
+          })
+        }
+      </div>
+    );
   }
 }
 </script>

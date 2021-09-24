@@ -9,7 +9,7 @@ const getComponentByName = name => modules.find(module => module.ui.name === nam
 
 const render = (h) => {
   return(
-    <div>
+    <div class="app-root">
       {
         mock.map(d => h(getComponentByName(d.componentName), { props: { ...d.componentProps } }))
       }
