@@ -21,6 +21,12 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+    customStyle: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   methods: {
@@ -33,13 +39,14 @@ export default {
     }
   },
   render(h) {
-    const { component, componentProps } = this;
+    const { component, componentProps, customStyle } = this;
     const className = {
       module: true,
       selected: this.selected
     };
     return (
-      <div 
+      <div
+        style={customStyle}
         class={className}
         onClick={this.handleModuleClick}
       >

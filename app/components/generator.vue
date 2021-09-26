@@ -54,6 +54,9 @@
               <module
                 ref="module"
                 :index='index'
+                :customStyle="{
+                  height: '1334px'
+                }"
                 :selected="index===activeModuleIndex"
                 :component="item.ui"
                 :componentProps="item.state"
@@ -115,9 +118,7 @@ export default {
   },
   methods: {
     handleLayerSelectedChange(value) {
-      console.log(value);
-      // todo 这地方还得改一下
-      this.activeModuleIndex = 0;
+      this.activeModuleIndex = !value ? 0 : this.list.findIndex(el => el.key === value);
     },
     async handleBuildClick() {
       try {
