@@ -1,21 +1,34 @@
 <script>
 export default {
+  name: 'ab',
   props: {
-    component: {
+    k: {
+      type: String,
+      default: ''
+    },
+    abConf: {
+      type: Object,
+      default: () => {
+        return {
+          test: 1
+        }
+      }
+    },
+    componentMap: {
       type: Object,
       default: () => {}
-    },
-    componentProps: {}
+    }
   },
   render(h) {
-    const { component, componentProps } = this;
-    return ( 
+    const { k, abConf, componentMap } = this;
+    const v = abConf[k];
+    return  ( 
       <div class="ab-wrapper">
         {
-          h(component, {props: componentProps})
+          v ? h(componentMap[v].component, { props: componentMap[v].props } ) : null
         }
       </div>
-    );
+    )
   }
 }
 </script>

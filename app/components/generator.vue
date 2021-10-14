@@ -70,7 +70,7 @@
     </section>
     <section class="right">
       <a-divider>编辑区</a-divider>
-      <editor 
+      <editor
         v-if="list[activeModuleIndex]"
         :editor="list[activeModuleIndex].editor">
       </editor>
